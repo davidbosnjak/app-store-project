@@ -4,11 +4,27 @@ import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
+import java.util.HashSet;
 public class Backend {
-    public static String[] Search(String searchTerm){
-        //temporary so we dont have errors
-        String[] matchingEntries = {searchTerm};
-       //check if what they searched contains stuff from entries
+    static final int MAX_SEARCH_TERM = 20;
+    public static HashSet<String> Search(String searchTerm, HashMap<String, String[]> database){
+        HashSet<String> matchingEntries = new HashSet();
+
+        if(searchTerm.length()>MAX_SEARCH_TERM){
+            //not gonna make a search term
+            return matchingEntries;
+        }
+
+
+        for(int i =searchTerm.length(); i>0; i--){
+            String slicedSearchTerm = searchTerm.substring(0,i);
+            for(String key: database.keySet()){
+                if(key.indexOf(slicedSearchTerm)!=-1){
+                    matchingEntries.add(key);
+                }
+            }
+        }
+
         return matchingEntries;
     }
     public static void downloadFile(URL fileURL, String outputFile) {
