@@ -10,13 +10,17 @@ public class Main {
 
         System.out.println("hello world");
         mainWindow();
+
+
     }
 
     public static void mainWindow(){
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("App Store");
-        frame.setSize(1280,720);
+        final int WINDOW_HEIGHT = 720;
+        final int WINDOW_WIDTH = 1280;
+        frame.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
