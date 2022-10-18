@@ -8,6 +8,10 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.HashSet;
+
+//public class Values{
+
+//}
 public class Backend {
     static final int MAX_SEARCH_TERM = 20;
     public static HashSet<String> Search(String searchTerm, HashMap<String, String[]> database){
@@ -38,7 +42,7 @@ public class Backend {
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             }
         } catch (Exception IOException) {
-            System.out.println("Something went wrong!");
+            System.out.println("Something went wrong! Check file location or input URL");
         }
     }
 
@@ -67,6 +71,17 @@ public class Backend {
 
         }
         return panelList;
+    }
+
+    public static void displayAppsFromButton(String buttonName){
+        //find list of apps based on button press
+
+        String[] appsToDisplay = new String[10000];
+        for(String app : appsToDisplay){
+            //function call to app displayer
+
+        }
+
     }
 
 
