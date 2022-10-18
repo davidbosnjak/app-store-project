@@ -1,3 +1,6 @@
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.io.*;
@@ -39,8 +42,31 @@ public class Backend {
         }
     }
 
-    public static void displayAppsFromSearchHits(String[] searchHits){
+    public static JPanel[] displayAppsFromSearchHits(String[] searchHits, int pos) throws IOException {
+        int i = 0;
+        JPanel[] panelList = new JPanel[searchHits.length];
+        for(String hit : searchHits){
+            JPanel panel = new JPanel();
+            panel.setLayout(null);
+            JLabel appName = new JLabel(hit);
+            appName.setBounds(0,0,200,30);
+            panel.add(appName);
+            JLabel starRating = new JLabel("5 stars");
+            starRating.setBounds(0,40,200,30);
+            panel.add(starRating);
+            /*
+            BufferedImage appIcon = ImageIO.read(new File("example"));
 
+            JLabel iconLabel = new JLabel(new ImageIcon(appIcon));
+            panel.add(iconLabel);
+
+             */
+            panelList[i] = panel;
+            i++;
+
+
+        }
+        return panelList;
     }
 
 
