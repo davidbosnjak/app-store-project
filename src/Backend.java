@@ -6,6 +6,10 @@ import java.net.URL;
 import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -14,6 +18,21 @@ import java.util.HashSet;
 //}
 public class Backend {
     static final int MAX_SEARCH_TERM = 20;
+
+    Backend(){
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from apps");
+            while(resultSet.next()){
+                System.out.println(resultSet.getString("appName"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
     public static HashSet<String> Search(String searchTerm, HashMap<String, String[]> database){
         HashSet<String> matchingEntries = new HashSet();
 

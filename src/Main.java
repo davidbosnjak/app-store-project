@@ -5,8 +5,8 @@ import java.net.URL;
 public class Main {
     public static void main(String[] args) {
 
-
-        mainWindow();
+        Backend backend  = new Backend();
+        //mainWindow();
 
 
     }
