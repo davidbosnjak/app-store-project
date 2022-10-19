@@ -1,32 +1,36 @@
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
 
-        Backend backend  = new Backend();
-        //mainWindow();
+        mainWindow();
 
 
     }
 
     public static void mainWindow(){
+        JPanel mainPanel = new JPanel();
+
+        JViewport viewport = new JViewport();
 
         JLayeredPane windowLayer = new JLayeredPane();
         windowLayer.setBackground(Color.LIGHT_GRAY);
         windowLayer.setBounds(0, 0, 1280, 720);
 
-
+        JLayeredPane scrollableStuff = new JLayeredPane();
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("App Store");
         frame.setSize(1280,720);
-        frame.setResizable(false);
+        frame.setResizable(true);
 
         JLabel titleMessage = new JLabel("Welcome to my app store");
         titleMessage.setFont(new Font("TimesRoman", Font.BOLD,30));
         titleMessage.setBounds(500,20,500,35);
+
 
 
 //      Search bar need the search function to be added to it
@@ -55,11 +59,31 @@ public class Main {
         sideLabel3.setFont(new Font("ComicSans", Font.BOLD, 25 ));
 
         //calls
+        ArrayList<String> apps = Backend.executeStatementAndGetReturn("test");
+        int startX = 500;
+        int currX = 500;
+        int currY = 350;
+        int xIncrement = 250;
+        int yIncrement = 250;
+        int i=0;
+        for(String app : apps) {
+            System.out.println(app);
+            if(currX == startX){
+                if(i==0){displayApp(app,currX , currY, (short) 5, "test", scrollableStuff);}
+                else{
+                    currX+=xIncrement;
+                    displayApp(app,currX , currY, (short) 5, "test", scrollableStuff);
+                }
 
-        displayApp("first app", 500,350 ,(short)5, "test", windowLayer);
-        displayApp("second app", 750,350 ,(short)5, "test", windowLayer);
-        displayApp("Does this work", 500,600 ,(short)5, "test", windowLayer);
-        displayApp("fourth app", 750,600,(short)5,"test",windowLayer);
+            }
+            else{
+                currX-=xIncrement;
+                currY+=yIncrement;
+                displayApp(app, currX, currY, (short)5, "test", scrollableStuff);
+            }
+            i++;
+
+        }
 
 
 //      Needs to be programmed but it is the scrollbar
@@ -67,17 +91,30 @@ public class Main {
         sideSlider.setBounds(1260, 0, 20, 720);
 
 //      This is where the layers are added
-        windowLayer.add(titleMessage, Integer.valueOf(0));
-        windowLayer.add(searchInput, Integer.valueOf(0));
-        windowLayer.add(sideBar, Integer.valueOf(0));
+        windowLayer.add(titleMessage, Integer.valueOf(1));
+        windowLayer.add(searchInput, Integer.valueOf(1));
+        windowLayer.add(sideBar, Integer.valueOf(1));
 
-        windowLayer.add(sideSlider, Integer.valueOf(0));
-        windowLayer.add(sideLabel1, Integer.valueOf(1));
-        windowLayer.add(sideLabel2, Integer.valueOf(1));
-        windowLayer.add(sideLabel3, Integer.valueOf(1));
+        windowLayer.add(sideSlider, Integer.valueOf(2));
+        windowLayer.add(sideLabel1, Integer.valueOf(2));
+        windowLayer.add(sideLabel2, Integer.valueOf(2));
+        windowLayer.add(sideLabel3, Integer.valueOf(2));
+        scrollableStuff.setBounds(0,0,1280,720);
+        windowLayer.add(scrollableStuff, Integer.valueOf(1));
 
+        viewport.add(scrollableStuff);
+        viewport.setBounds(0,0,1280,720);
+        mainPanel.add(windowLayer);
+        mainPanel.setBounds(0,0,1280,720);
+        mainPanel.setVisible(true);
+        mainPanel.add(viewport);
+
+        JScrollPane jsp = new JScrollPane(mainPanel);
+        jsp.setLayout(null);
+        jsp.setBounds(1000,0,10,720);
+        jsp.setVisible(true);
         frame.setVisible(true);
-        frame.add(windowLayer);
+        frame.add(mainPanel);
     }
 
     public static void displayApp(String name, int cordX, int cordY, short starRating,  String image, JLayeredPane pane){
@@ -109,5 +146,28 @@ public class Main {
 
 
 
+    }
+
+    public static void displayAppsFromString(String[] apps, int currX, int currY, int startX, int xIncrement, int yIncrement, JLayeredPane scrollableStuff) {
+
+        int i = 0;
+        for (String app : apps) {
+            System.out.println(app);
+            if (currX == startX) {
+                if (i == 0) {
+                    displayApp(app, currX, currY, (short) 5, "test", scrollableStuff);
+                } else {
+                    currX += xIncrement;
+                    displayApp(app, currX, currY, (short) 5, "test", scrollableStuff);
+                }
+
+            } else {
+                currX -= xIncrement;
+                currY += yIncrement;
+                displayApp(app, currX, currY, (short) 5, "test", scrollableStuff);
+            }
+            i++;
+
+        }
     }
 }
