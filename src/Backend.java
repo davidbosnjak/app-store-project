@@ -14,13 +14,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import static java.lang.Character.toLowerCase;
+
 //public class Values{
 
 //}
 public class Backend {
     static final int MAX_SEARCH_TERM = 20;
 
-    public static ArrayList executeStatementAndGetReturn(String sqlStatement){
+    public static ArrayList getAppNames(){
 
         ArrayList<String> returnString  = new ArrayList();
 
@@ -28,7 +30,6 @@ public class Backend {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from apps");
-            int i=0;
             while(resultSet.next()){
                 String appName = (resultSet.getString("appName"));
                 returnString.add(appName);
@@ -40,22 +41,67 @@ public class Backend {
 
 
     }
-    public static HashSet<String> Search(String searchTerm, HashMap<String, String[]> database){
+    public static ArrayList<String> getAppsForButton(String button){
+        ArrayList<String> returnString  = new ArrayList();
+        String appName = new String();
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from apps");
+            while(resultSet.next()){
+
+                if(resultSet.getString(button).equals("y")){
+                    appName = resultSet.getString("appName");
+                    System.out.println(appName+" example");
+                    returnString.add(appName);
+
+
+                }
+                else{
+                    String symbol = resultSet.getString(button);
+
+                    appName = resultSet.getString("appName");
+                    System.out.println(appName+" is not a "+button+" "+symbol);
+                }
+
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return returnString;
+
+
+    }
+    public static HashSet<String> Search(String searchTerm){
         HashSet<String> matchingEntries = new HashSet();
 
         if(searchTerm.length()>MAX_SEARCH_TERM){
-            //not gonna make a search term
             return matchingEntries;
         }
 
-
+        ArrayList<String> apps = getAppNames();
+        for(String app: apps){
+            if(searchTerm.equalsIgnoreCase(app)){
+                matchingEntries.add(app);
+            }
+        }
         for(int i =searchTerm.length(); i>0; i--){
             String slicedSearchTerm = searchTerm.substring(0,i);
-            for(String key: database.keySet()){
-                if(key.indexOf(slicedSearchTerm)!=-1){
-                    matchingEntries.add(key);
+            for(String app: apps){
+                String firstChar = String.valueOf(app.charAt(0));
+                String firstCharSearch = String.valueOf(slicedSearchTerm.charAt(0));
+                if(app.indexOf(slicedSearchTerm)!=-1 && firstChar.equalsIgnoreCase(firstCharSearch)){
+                    matchingEntries.add(app);
                 }
             }
+        }
+        for(String app: apps){
+            if(toLowerCase(app.charAt(0)) == toLowerCase(searchTerm.charAt(0))){
+                matchingEntries.add(app);
+            }
+
         }
 
         return matchingEntries;
@@ -114,9 +160,7 @@ public class Backend {
 
 
 
-    //database
-    static HashMap<String, String[]> database  = new HashMap<String, String[]>();
-    //might have to hardcode putting items into database on run...
+
 
 
 }
