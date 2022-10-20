@@ -13,6 +13,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.SortedSet;
 
 import static java.lang.Character.toLowerCase;
 
@@ -74,8 +76,8 @@ public class Backend {
 
 
     }
-    public static HashSet<String> Search(String searchTerm){
-        HashSet<String> matchingEntries = new HashSet();
+    public static LinkedHashSet<String> Search(String searchTerm){
+        LinkedHashSet<String> matchingEntries = new LinkedHashSet<>();
 
         if(searchTerm.length()>MAX_SEARCH_TERM){
             return matchingEntries;
@@ -85,6 +87,7 @@ public class Backend {
         for(String app: apps){
             if(searchTerm.equalsIgnoreCase(app)){
                 matchingEntries.add(app);
+                System.out.println("found exact match with "+app);
             }
         }
         for(int i =searchTerm.length(); i>0; i--){
@@ -100,6 +103,7 @@ public class Backend {
         for(String app: apps){
             if(toLowerCase(app.charAt(0)) == toLowerCase(searchTerm.charAt(0))){
                 matchingEntries.add(app);
+
             }
 
         }

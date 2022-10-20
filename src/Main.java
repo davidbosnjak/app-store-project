@@ -8,6 +8,7 @@ import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class Main implements ActionListener, FocusListener{
     static JButton sideLabel1 = new JButton();
@@ -196,7 +197,7 @@ public class Main implements ActionListener, FocusListener{
         if(actionEvent.getSource() == searchInput){
             System.out.println("something happened in search");
             String userEntry = searchInput.getText();
-            HashSet<String> apps= Backend.Search(userEntry);
+            LinkedHashSet<String> apps= Backend.Search(userEntry);
             ArrayList<String> appList  = new ArrayList<>();
             for(String app : apps){
                 appList.add(app);
