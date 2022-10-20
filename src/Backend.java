@@ -49,27 +49,31 @@ public class Backend {
     public static String getLinkFromDatabase(String item, int mode) {
         System.out.println(item+" getLinkFromDatabase");
         //download link
-        if (mode == 0) {
+
             try {
                 Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root", "davidsam");
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery("select * from apps");
                 while (resultSet.next()) {
 
-                    if(resultSet.getString("appName").equals(item) && mode==0){
-                        return resultSet.getString("appURL");
-                    }
-                    if(resultSet.getString("appName").equals(item) && mode ==1){
-                        System.out.println(resultSet.getString("appDownload"));
-                        return resultSet.getString("appDownload");
+                    if(resultSet.getString("appName").equals(item)){
+                        System.out.println("FOUND");
+                        if(mode==0){return resultSet.getString("appURL");}
+                        else{
+                            return resultSet.getString("appDownload");
+                        }
 
+                        }
+                    else{
+                        System.out.println(resultSet.getString("appName")+" does not equal "+item);
                     }
+
 
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        }
+
         return item;
     }
     public static ArrayList<String> getAppsForButton(String button){

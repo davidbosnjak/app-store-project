@@ -1,13 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-public class Main implements ActionListener, FocusListener{
+public class Main implements ActionListener, FocusListener, AdjustmentListener {
     static JButton featuredButton = new JButton();
     static JButton programmingButton = new JButton();
     static JButton communicationButton = new JButton();
@@ -23,6 +20,7 @@ public class Main implements ActionListener, FocusListener{
     static JTextField searchInput = new JTextField("Search....");
 
     static String buttonPressed = new String();
+    static JScrollBar sideSlider = new JScrollBar();
 
 
     public static void main(String[] args) {
@@ -37,11 +35,11 @@ public class Main implements ActionListener, FocusListener{
 
         JViewport viewport = new JViewport();
 
-        newPane.setBounds(0,0,1280,720);
+        newPane.setBounds(0,0,1280,5000);
         newPane.setLayout(null);
 
         windowLayer.setBackground(Color.LIGHT_GRAY);
-        windowLayer.setBounds(0, 0, 1280, 720);
+        windowLayer.setBounds(0, 0, 1280, 3000);
         appPane.setBounds(0,0,1280,720);
 
         JLayeredPane scrollableStuff = new JLayeredPane();
@@ -105,8 +103,9 @@ public class Main implements ActionListener, FocusListener{
 
 
 //      Needs to be programmed but it is the scrollbar
-        JScrollBar sideSlider = new JScrollBar();
+
         sideSlider.setBounds(1260, 0, 20, 720);
+        sideSlider.addAdjustmentListener(new Main());
 
 //      This is where the layers are added
         windowLayer.add(titleMessage, Integer.valueOf(1));
@@ -133,7 +132,7 @@ public class Main implements ActionListener, FocusListener{
 
     public static void displayApp(String name, int cordX, int cordY, short starRating,  String image, JPanel pane){
         JLayeredPane layPane = new JLayeredPane();
-        layPane.setBounds(0,0,1280,2000);
+        layPane.setBounds(0,0,1280,4000);
         JPanel thirdAppSlot = new JPanel();
         thirdAppSlot.setBackground(Color.CYAN);
         thirdAppSlot.setBounds(cordX, cordY-150, 200, 200);
@@ -154,6 +153,7 @@ public class Main implements ActionListener, FocusListener{
         downloadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("DOWNLOAD REUESTED");
                 String url = Backend.getLinkFromDatabase(name, 1);
                 Backend.openWebsite(url);
             }
@@ -284,5 +284,11 @@ public class Main implements ActionListener, FocusListener{
     public void focusLost(FocusEvent e) {
         searchInput.setText("Search...");
 
+    }
+
+    @Override
+    public void adjustmentValueChanged(AdjustmentEvent e) {
+        System.out.println("adjustement made");
+        newPane.setBounds(0,sideSlider.getValue()*-100,10000,7000);
     }
 }
