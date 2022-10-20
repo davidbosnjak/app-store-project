@@ -46,6 +46,32 @@ public class Backend {
 
 
     }
+    public static String getLinkFromDatabase(String item, int mode) {
+        System.out.println(item+" getLinkFromDatabase");
+        //download link
+        if (mode == 0) {
+            try {
+                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root", "davidsam");
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("select * from apps");
+                while (resultSet.next()) {
+
+                    if(resultSet.getString("appName").equals(item) && mode==0){
+                        return resultSet.getString("appURL");
+                    }
+                    if(resultSet.getString("appName").equals(item) && mode ==1){
+                        System.out.println(resultSet.getString("appDownload"));
+                        return resultSet.getString("appDownload");
+
+                    }
+
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return item;
+    }
     public static ArrayList<String> getAppsForButton(String button){
         ArrayList<String> returnString  = new ArrayList();
         String appName = new String();
@@ -98,9 +124,19 @@ public class Backend {
             for(String app: apps){
                 String firstChar = String.valueOf(app.charAt(0));
                 String firstCharSearch = String.valueOf(slicedSearchTerm.charAt(0));
-                if(app.indexOf(slicedSearchTerm)!=-1 && firstChar.equalsIgnoreCase(firstCharSearch)){
+                slicedSearchTerm = slicedSearchTerm.toLowerCase();
+                String appCopy = app.toLowerCase();
+                System.out.println(slicedSearchTerm);
+                if(appCopy.indexOf(slicedSearchTerm)!=-1 && firstChar.equalsIgnoreCase(firstCharSearch)){
                     matchingEntries.add(app);
+                    System.out.println("second method found something");
                 }
+            }
+        }
+        for(String app: apps){
+
+            if(searchTerm.contains(app)){
+                matchingEntries.add(app);
             }
         }
         for(String app: apps){
@@ -114,6 +150,7 @@ public class Backend {
         return matchingEntries;
     }
     public static void openWebsite(String webURL){
+        System.out.println(webURL);
         try{
             URI url = new URI(webURL);
             java.awt.Desktop.getDesktop().browse(url);

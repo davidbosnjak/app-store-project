@@ -22,6 +22,8 @@ public class Main implements ActionListener, FocusListener{
     static JPanel newPane = new JPanel();
     static JTextField searchInput = new JTextField("Search....");
 
+    static String buttonPressed = new String();
+
 
     public static void main(String[] args) {
 
@@ -149,12 +151,27 @@ public class Main implements ActionListener, FocusListener{
         downloadButton.setBounds(cordX+150, cordY, 45, 45);
         downloadButton.setBackground(Color.LIGHT_GRAY);
         downloadButton.setFont(new Font("TimesRoman", Font.BOLD, 10));
-        downloadButton.addActionListener(new Main());
+        downloadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String url = Backend.getLinkFromDatabase(name, 1);
+                Backend.openWebsite(url);
+            }
+        });
 
         JButton websiteButton = new JButton();
         websiteButton.setText("w");
         websiteButton.setFont(new Font("TimesRoman", Font.BOLD, 10));
-        websiteButton.addActionListener(new Main());
+        websiteButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(name);
+                String url = Backend.getLinkFromDatabase(name,0);
+                System.out.println("this is the url"+url);
+                Backend.openWebsite(url);
+            }
+        });
         websiteButton.setBounds(cordX+110, cordY, 45,45);
         websiteButton.setBackground(Color.LIGHT_GRAY);
 
@@ -198,6 +215,8 @@ public class Main implements ActionListener, FocusListener{
         }
     }
 
+
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         boolean refresh = false;
@@ -209,7 +228,6 @@ public class Main implements ActionListener, FocusListener{
 
        windowLayer.remove(newPane);
        newPane.removeAll();
-
         if(actionEvent.getSource() == searchInput){
             System.out.println("something happened in search");
             String userEntry = searchInput.getText();
