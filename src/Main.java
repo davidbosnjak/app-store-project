@@ -4,17 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 public class Main implements ActionListener, FocusListener{
-    static JButton sideLabel1 = new JButton();
-    static JButton sideLabel2 = new JButton();
-    static JButton sideLabel3 = new JButton();
-    static  JButton sideLabel4 = new JButton();
+    static JButton featuredButton = new JButton();
+    static JButton programmingButton = new JButton();
+    static JButton communicationButton = new JButton();
+    static  JButton browserButton = new JButton();
     static int startX = 500;
     static int currX = 500;
     static int currY = 350;
@@ -70,30 +67,30 @@ public class Main implements ActionListener, FocusListener{
         sideBar.setBounds(0, 0, 300, 720);
 
 
-        sideLabel1.setBounds(10, 150, 280, 50);
-        sideLabel1.setText("Featured");
-        sideLabel1.setFont(new Font("TimesRoman", Font.BOLD, 25 ));
-        sideLabel1.addActionListener(new Main());
+        featuredButton.setBounds(10, 150, 280, 50);
+        featuredButton.setText("Featured");
+        featuredButton.setFont(new Font("TimesRoman", Font.BOLD, 25 ));
+        featuredButton.addActionListener(new Main());
 
 
-        sideLabel2.setBounds(10, 225, 280, 50);
-        sideLabel2.setText("Programming");
-        sideLabel2.setFont(new Font("SansSerif", Font.BOLD, 25 ));
-        sideLabel2.addActionListener(new Main());
-
-
-
-        sideLabel3.setBounds(10, 300, 280, 50);
-        sideLabel3.setText("Communication");
-        sideLabel3.setFont(new Font("ComicSans", Font.BOLD, 25 ));
-        sideLabel3.addActionListener(new Main());
+        programmingButton.setBounds(10, 225, 280, 50);
+        programmingButton.setText("Programming");
+        programmingButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
+        programmingButton.addActionListener(new Main());
 
 
 
-        sideLabel4.setBounds(10, 375, 280, 50);
-        sideLabel4.setText("Browsers");
-        sideLabel4.setFont(new Font("SansSerif", Font.BOLD, 25 ));
-        sideLabel4.addActionListener(new Main());
+        communicationButton.setBounds(10, 300, 280, 50);
+        communicationButton.setText("Communication");
+        communicationButton.setFont(new Font("ComicSans", Font.BOLD, 25 ));
+        communicationButton.addActionListener(new Main());
+
+
+
+        browserButton.setBounds(10, 375, 280, 50);
+        browserButton.setText("Browsers");
+        browserButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
+        browserButton.addActionListener(new Main());
 
         //calls
         ArrayList<String> apps = Backend.getAppNames();
@@ -115,10 +112,10 @@ public class Main implements ActionListener, FocusListener{
         windowLayer.add(sideBar, Integer.valueOf(1));
 
         windowLayer.add(sideSlider, Integer.valueOf(2));
-        windowLayer.add(sideLabel1, Integer.valueOf(2));
-        windowLayer.add(sideLabel2, Integer.valueOf(2));
-        windowLayer.add(sideLabel3, Integer.valueOf(2));
-        windowLayer.add(sideLabel4, Integer.valueOf(2));
+        windowLayer.add(featuredButton, Integer.valueOf(2));
+        windowLayer.add(programmingButton, Integer.valueOf(2));
+        windowLayer.add(communicationButton, Integer.valueOf(2));
+        windowLayer.add(browserButton, Integer.valueOf(2));
         scrollableStuff.setBounds(0,0,1280,720);
         windowLayer.add(scrollableStuff, Integer.valueOf(1));
         windowLayer.add(newPane);
@@ -141,25 +138,37 @@ public class Main implements ActionListener, FocusListener{
 
         String thirdAppNameString = name;
 
-        JLabel thirdAppName = new JLabel();
-        thirdAppName.setBounds(cordX, cordY, 200, 30);
-        thirdAppName.setText(thirdAppNameString);
-        thirdAppName.setBackground(Color.lightGray);
-        thirdAppName.setFont(new Font("TimesRoman", Font.BOLD, 15));
+        JLabel appNameLabel = new JLabel();
+        appNameLabel.setBounds(cordX, cordY, 200, 30);
+        appNameLabel.setText(thirdAppNameString);
+        appNameLabel.setBackground(Color.lightGray);
+        appNameLabel.setFont(new Font("TimesRoman", Font.BOLD, 15));
 
-        JButton thirdAppDownload = new JButton("\u21e3");
-        thirdAppDownload.setBounds(cordX+150, cordY, 30, 30);
-        thirdAppDownload.setBackground(Color.LIGHT_GRAY);
-        thirdAppDownload.setFont(new Font("TimesRoman", Font.BOLD, 10));
+        JButton downloadButton = new JButton();
+        downloadButton.setText("\u21e3");
+        downloadButton.setBounds(cordX+150, cordY, 45, 45);
+        downloadButton.setBackground(Color.LIGHT_GRAY);
+        downloadButton.setFont(new Font("TimesRoman", Font.BOLD, 10));
+        downloadButton.addActionListener(new Main());
 
-        String stringStarRating = Short.toString(starRating);
+        JButton websiteButton = new JButton();
+        websiteButton.setText("w");
+        websiteButton.setFont(new Font("TimesRoman", Font.BOLD, 10));
+        websiteButton.addActionListener(new Main());
+        websiteButton.setBounds(cordX+110, cordY, 45,45);
+        websiteButton.setBackground(Color.LIGHT_GRAY);
+
+
+        String stringStarRating = "\u2605".repeat(starRating);
+
         JLabel stars = new JLabel(stringStarRating);
         stars.setBounds(cordX, cordY-100, 200,30);
         stars.setBackground(Color.LIGHT_GRAY);
         layPane.add(thirdAppSlot,0);
-        layPane.add(thirdAppName,Integer.valueOf(1));
-        layPane.add(thirdAppDownload,Integer.valueOf(1));
-        layPane.add(stars);
+        layPane.add(appNameLabel,Integer.valueOf(1));
+        layPane.add(downloadButton,Integer.valueOf(1));
+        layPane.add(websiteButton, Integer.valueOf(1));
+        layPane.add(stars,Integer.valueOf(2));
         pane.add(layPane);
 
 
@@ -191,8 +200,15 @@ public class Main implements ActionListener, FocusListener{
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        windowLayer.remove(newPane);
-        newPane.removeAll();
+        boolean refresh = false;
+       if(actionEvent.getActionCommand().equals("w")){
+           System.out.println("requested website");
+           Backend.openWebsite("https://youtube.com");
+           refresh = true;
+       }
+
+       windowLayer.remove(newPane);
+       newPane.removeAll();
 
         if(actionEvent.getSource() == searchInput){
             System.out.println("something happened in search");
@@ -205,31 +221,34 @@ public class Main implements ActionListener, FocusListener{
             displayAppsFromString(appList, currX,currY,startX,xIncrement,yIncrement,newPane);
         }
 
-        if(actionEvent.getSource() == sideLabel1){
+        if(actionEvent.getSource() == featuredButton){
             ArrayList<String> apps = Backend.getAppsForButton("featured");
             displayAppsFromString(apps, currX, currY, startX, xIncrement, yIncrement, newPane);
             System.out.println("Featured");
 
 
         }
-        if(actionEvent.getSource() == sideLabel2){
+        if(actionEvent.getSource() == programmingButton){
             ArrayList<String> apps = Backend.getAppsForButton("programming");
             displayAppsFromString(apps, currX, currY, startX, xIncrement, yIncrement, newPane);
 
             System.out.println("Programming");
         }
-        if(actionEvent.getSource() == sideLabel3){
+        if(actionEvent.getSource() == communicationButton){
             ArrayList<String> apps = Backend.getAppsForButton("communication");
             displayAppsFromString(apps, currX, currY, startX, xIncrement, yIncrement, newPane);
 
             System.out.println("Communication");
 
         }
-        if(actionEvent.getSource()== sideLabel4){
+        if(actionEvent.getSource()== browserButton){
             ArrayList<String> apps = Backend.getAppsForButton("browser");
             displayAppsFromString(apps, currX, currY, startX, xIncrement, yIncrement, newPane);
 
             System.out.println("Browsers");
+        }
+        if(refresh){
+            displayAppsFromString(Backend.getAppNames(), currX, currY,startX,xIncrement,yIncrement,newPane);
         }
 
         windowLayer.add(newPane);

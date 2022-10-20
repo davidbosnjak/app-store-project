@@ -2,6 +2,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.io.*;
 import java.nio.channels.Channels;
@@ -109,6 +112,18 @@ public class Backend {
         }
 
         return matchingEntries;
+    }
+    public static void openWebsite(String webURL){
+        try{
+            URI url = new URI(webURL);
+            java.awt.Desktop.getDesktop().browse(url);
+            System.out.println("should have opened smt");
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch(Exception e){
+            System.out.println("exception happened");
+        }
     }
     public static void downloadFile(URL fileURL, String outputFile) {
         try {
