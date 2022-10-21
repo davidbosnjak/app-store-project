@@ -13,18 +13,19 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
     static JButton programmingButton = new JButton();
     static JButton communicationButton = new JButton();
     static  JButton browserButton = new JButton();
-    static int startX = 500;
-    static int currX = 500;
-    static int currY = 350;
-    static int xIncrement = 250;
-    static int yIncrement = 250;
+    final static int startX = 500;
+    final static int currX = 500;
+    final static int currY = 200;
+    final static int xIncrement = 250;
+    final static int yIncrement = 250;
     static JLayeredPane windowLayer = new JLayeredPane();
-    static JLayeredPane appPane = new JLayeredPane();
     static JPanel newPane = new JPanel();
     static JTextField searchInput = new JTextField("Search....");
 
     static JScrollBar sideSlider = new JScrollBar();
     static JButton allButton = new JButton();
+    static JPanel portPanel = new JPanel();
+    static JPanel mainPanel = new JPanel();
 
 
     public static void main(String[] args) {
@@ -35,16 +36,19 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
     }
 
     public static void mainWindow(){
-        JPanel mainPanel = new JPanel();
+
+
+        mainPanel.setBounds(0,0,1280,720);
+        mainPanel.setLayout(null);
 
         JViewport viewport = new JViewport();
 
         newPane.setBounds(0,0,1280,5000);
         newPane.setLayout(null);
 
-        windowLayer.setBackground(Color.decode("#ecf0f1"));
+        portPanel.setLayout(null);
+        portPanel.setBounds(0,150,1280,720);
         windowLayer.setBounds(0, 0, 1280, 3000);
-        appPane.setBounds(0,0,1280,720);
 
         JLayeredPane scrollableStuff = new JLayeredPane();
         JFrame frame = new JFrame();
@@ -54,15 +58,15 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         frame.setResizable(true);
 
         JLabel titleMessage = new JLabel("App Store Pro");
-        titleMessage.setFont(new Font("TimesRoman", Font.BOLD,30));
-        titleMessage.setBounds(500,20,500,35);
+        titleMessage.setFont(new Font("TimesRoman", Font.BOLD,40));
+        titleMessage.setBounds(600,20,500,35);
 
 
         String buttonColor = "#bdc3c7";
 //      Search bar need the search function to be added to it
         searchInput.addActionListener(new Main());
         searchInput.addFocusListener(new Main());
-        searchInput.setBounds(500, 60, 500, 50);
+        searchInput.setBounds(500, 80, 500, 50);
         // need to change the base text so when input is added it will remove "search..."
 
 //      this is the part where we add the sidebar and the features to it
@@ -78,7 +82,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
 
         featuredButton.setBounds(10, 150, 280, 50);
         featuredButton.setText("Featured");
-        featuredButton.setFont(new Font("TimesRoman", Font.BOLD, 25 ));
+        featuredButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
         featuredButton.setBackground(Color.decode(buttonColor));
         featuredButton.addActionListener(new Main());
 
@@ -93,7 +97,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
 
         communicationButton.setBounds(10, 300, 280, 50);
         communicationButton.setText("Communication");
-        communicationButton.setFont(new Font("ComicSans", Font.BOLD, 25 ));
+        communicationButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
         communicationButton.setBackground(Color.decode(buttonColor));
         communicationButton.addActionListener(new Main());
 
@@ -120,7 +124,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
 
 //      Needs to be programmed but it is the scrollbar
 
-        sideSlider.setBounds(1260, 0, 20, 720);
+        sideSlider.setBounds(1250, 0, 30, 700);
         sideSlider.addAdjustmentListener(new Main());
         sideSlider.setUnitIncrement(1);
 
@@ -138,10 +142,13 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         scrollableStuff.setBounds(0,0,1280,720);
         windowLayer.add(scrollableStuff, Integer.valueOf(1));
         newPane.setBackground(Color.decode("#7f8c8d"));
-        windowLayer.add(newPane);
+        portPanel.add(newPane);
+        windowLayer.setBackground(Color.decode("#7f8c8d"));
+        mainPanel.add(portPanel);
+        mainPanel.setBackground(Color.decode("#7f8c8d"));
+        windowLayer.add(mainPanel);
 
         newPane.addMouseWheelListener(new Main());
-        //windowLayer.add(appPane);
         viewport.add(scrollableStuff);
         viewport.setBounds(0,0,1280,720);
 
@@ -179,7 +186,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         JButton downloadButton = new JButton(downIcon);
         downloadButton.setText("\u21e3");
         downloadButton.setBounds(cordX+150, cordY, 45, 45);
-        downloadButton.setBackground(Color.decode("#bdc3c7"));
+        downloadButton.setBackground(Color.decode("#2980b9"));
         downloadButton.setFont(new Font("TimesRoman", Font.BOLD, 10));
         downloadButton.addActionListener(new ActionListener() {
             @Override
@@ -206,7 +213,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
             }
         });
         websiteButton.setBounds(cordX+80, cordY, 45,45);
-        websiteButton.setBackground(Color.decode("#bdc3c7"));
+        websiteButton.setBackground(Color.decode("#2980b9"));
 
 
         String stringStarRating = "\u2605".repeat(starRating);
@@ -266,8 +273,11 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
            Backend.openWebsite("https://youtube.com");
            refresh = true;
        }
+        windowLayer.remove(mainPanel);
+       mainPanel.remove(portPanel);
+       portPanel.remove(newPane);
 
-       windowLayer.remove(newPane);
+
        newPane.removeAll();
         if(actionEvent.getSource() == searchInput){
             System.out.println("something happened in search");
@@ -334,15 +344,20 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
 
             System.out.println("Browsers");
         }
-        if(refresh){
+        if(refresh || actionEvent.getSource()== allButton){
             try {
-                displayAppsFromString(Backend.getAppNames(), currX, currY,startX,xIncrement,yIncrement,newPane);
+                ArrayList<String> allApps = Backend.getAppNames();
+                displayAppsFromString(allApps, currX, currY,startX,xIncrement,yIncrement,newPane);
+                sideSlider.setMaximum((allApps.size()-1)*3);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        windowLayer.add(mainPanel);
+        mainPanel.add(portPanel);
+        portPanel.add(newPane);
 
-        windowLayer.add(newPane);
+
 
 
     }
