@@ -153,6 +153,42 @@ public class Backend {
 
         return matchingEntries;
     }
+    public static String getCategoryForApp(String app){
+        String category = new String();
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from apps");
+            while(resultSet.next()){
+                if(resultSet.getString("appName").equals(app)){
+                    return resultSet.getString("category");
+                }
+
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return category;
+    }
+    public static int getRatingForApp(String app){
+        int rating = 1;
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from apps");
+            while(resultSet.next()){
+                if(resultSet.getString("appName").equals(app)){
+                    return resultSet.getInt("appRating");
+                }
+
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rating;
+    }
     public static void openWebsite(String webURL){
         System.out.println(webURL);
         try{
