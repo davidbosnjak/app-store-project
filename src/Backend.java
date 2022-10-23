@@ -13,18 +13,27 @@ import static java.lang.Character.toLowerCase;
 public class Backend {
     //max search term that shouldn't be exceeded
     static final int MAX_SEARCH_TERM = 20;
+    static Connection connection;
 
+    static {
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //worth noting that most of these function can probably be made into one but i've already rewrote these 800+ lines of code too many times
     //looks through the database and returns a list of every single app name
     public static ArrayList<String> getAppNames(){
 
         ArrayList<String> returnList  = new ArrayList<>();
 
         try {
-            //connect to the mysql server thing
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+
             Statement statement = connection.createStatement();
-            //execute this sql statement which just gets every row from every column
-            ResultSet resultSet = statement.executeQuery("select * from apps");
+
+            ResultSet resultSet = statement.executeQuery("select `appName` from apps");
 
             //while results still exist, find the appName in the row and add it to a list
             while(resultSet.next()){
@@ -36,57 +45,38 @@ public class Backend {
         }
         //return the list
         return returnList;
-
-
     }
-    //should have made a "get x from database" function instead of making like 4 different ones...
-    //works the same as appname function
+    //this function gets a specific item in the database. It will get either the website link or the download link
     public static String getLinkFromDatabase(String item, int mode) {
-        System.out.println(item+" getLinkFromDatabase");
-        //download link
-
             try {
-                Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root", "davidsam");
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("select * from apps");
-                while (resultSet.next()) {
-
-                    if(resultSet.getString("appName").equals(item)){
-                        System.out.println("FOUND");
-                        if(mode==0){return resultSet.getString("appURL");}
-                        else{
-                            return resultSet.getString("appDownload");
-                        }
-
-                        }
-                    else{
-                        System.out.println(resultSet.getString("appName")+" does not equal "+item);
-                    }
-
+                if(mode == 0) {
+                    //this sql statement gets the appUrl from the database and gets the specific row where the appName matches the one we want
+                    ResultSet resultSet = statement.executeQuery("SELECT `appURL`, `appName` FROM apps WHERE `appName` = '" + item + "'");
+                    resultSet.next();
+                    return resultSet.getString("appURL");
+                }
+                else{
+                    ResultSet resultSet = statement.executeQuery("SELECT `appDownload`, `appName` FROM apps WHERE `appName` = '" + item + "'");
+                    resultSet.next();
+                    return resultSet.getString("appDownload");
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
-        return item;
-
     }
     //works the same as app name function
     public static ArrayList<String> getAppsForButton(String button){
         ArrayList<String> returnString  = new ArrayList<>();
-        String appName;
 
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
+            //Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from apps");
+            //get apps that are part of a certain button
+            ResultSet resultSet = statement.executeQuery("select `appName` from apps WHERE `"+button+"` = 'y'");
             while(resultSet.next()){
                 //if its part of the appropriate column in the database
-                if(resultSet.getString(button).equals("y")){
-                    appName = resultSet.getString("appName");
-                    returnString.add(appName);
-
-                }
+                returnString.add(resultSet.getString("appName"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -145,41 +135,27 @@ public class Backend {
         }
         return matchingEntries;
     }
-    //same as getNames
+    //same as getLink
     public static String getCategoryForApp(String app){
-        String category = new String();
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from apps");
-            while(resultSet.next()){
-                if(resultSet.getString("appName").equals(app)){
-                    return resultSet.getString("category");
-                }
-
-            }
+            ResultSet resultSet = statement.executeQuery("select `category` from apps WHERE `appName` = '"+app+"'");
+            resultSet.next();
+            return resultSet.getString("category");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return category;
     }
-    //same as getNames
+    //same as getLink
     public static int getRatingForApp(String app){
-        int rating = 1;
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/appstoreSchema", "root","davidsam");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from apps");
-            while(resultSet.next()){
-                if(resultSet.getString("appName").equals(app)){
-                    return resultSet.getInt("appRating");
-                }
-
-            }
+            ResultSet resultSet = statement.executeQuery("select `appRating` from apps WHERE `appName` = '"+app+"'");
+            resultSet.next();
+            return resultSet.getInt("appRating");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return rating;
     }
 
     //website opener
