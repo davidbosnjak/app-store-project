@@ -87,11 +87,11 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         settingsPanel.add(accentOptions);
 
         JLabel themeLabel = new JLabel("Select app theme");
-        themeLabel.setBounds(10,70,80,20);
+        themeLabel.setBounds(10,70,200,20);
         themeOptions.setBounds(10,90,100,20);
 
         JLabel panelColorLabel = new JLabel("Select panel color");
-        panelColorLabel.setBounds(10,120,80,20);
+        panelColorLabel.setBounds(10,120,200,20);
 
         panelColorOptions.setBounds(10,140,100,20);
         settingsPanel.add(panelColorLabel);
@@ -120,7 +120,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         mainPanel.setBounds(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
         mainPanel.setLayout(null);
 
-
+        titleMessage.setForeground(Color.WHITE);
         //set to 5000 pixels because the pane needs to extend far enough to contain 28 apps
         scrollablePanel.setBounds(0,0,WINDOW_WIDTH,5000);
         scrollablePanel.setLayout(null);
@@ -220,7 +220,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         titleMessage.setText("App Store Pro");
         titleMessage.setFont(new Font("TimesRoman", Font.BOLD,40));
         titleMessage.setBounds(300,20,500,35);
-        titleMessage.setForeground(Color.decode(titleColor));
+        //titleMessage.setForeground(Color.decode(titleColor));
 
         searchInput.setBounds(200, 80, 500, 50);
         searchInput.setBackground(Color.decode(panelColor));
@@ -235,6 +235,7 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
     //function for displaying sidebar that needs to exist for color changing purposes
     public static void displaySideBar(JPanel sideBar) throws IOException {
         System.out.println("drawing sidebar");
+        System.out.println(buttonColorGrey);
         //setting background color and border color
         sideBar.setLayout(null);
         sideBar.setBackground(Color.decode(sideBarColor));
@@ -243,7 +244,6 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         //setting up the all apps button
         allButton.setBounds(10,75,280,50);
         allButton.setText("All Apps");
-        allButton.setForeground(Color.WHITE);
         allButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
         allButton.setBackground(Color.decode(buttonColorGrey));
         allButton.setBorder(new LineBorder(Color.decode(accentColor)));
@@ -254,14 +254,12 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         featuredButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
         featuredButton.setBackground(Color.decode(buttonColorGrey));
         featuredButton.setBorder(new LineBorder(Color.decode(accentColor)));
-        featuredButton.setForeground(Color.WHITE);
 
         //setting up the programming apps button
         programmingButton.setBounds(10, 225, 280, 50);
         programmingButton.setText("Programming");
         programmingButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
         programmingButton.setBackground(Color.decode(buttonColorGrey));
-        programmingButton.setForeground(Color.WHITE);
         programmingButton.setBorder(new LineBorder(Color.decode(accentColor)));
 
         //setting up the communication apps button
@@ -269,7 +267,6 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         communicationButton.setText("Communication");
         communicationButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
         communicationButton.setBackground(Color.decode(buttonColorGrey));
-        communicationButton.setForeground(Color.WHITE);
         communicationButton.setBorder(new LineBorder(Color.decode(accentColor)));
 
         //setting up the browser apps button
@@ -277,8 +274,6 @@ public class Main implements ActionListener, FocusListener, AdjustmentListener, 
         browserButton.setText("Browsers");
         browserButton.setBorder(new LineBorder(Color.decode(accentColor)));
         browserButton.setFont(new Font("SansSerif", Font.BOLD, 25 ));
-        browserButton.setBackground(Color.decode(buttonColorGrey));
-        browserButton.setForeground(Color.WHITE);
 
         //setting up the settings button
         settingsButton.setBounds(10,600,70,70);
